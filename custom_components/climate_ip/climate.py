@@ -30,7 +30,7 @@ from homeassistant.components.climate import (
     ATTR_TARGET_TEMP_LOW,
     DOMAIN,
     ClimateEntity,
-    HVAC_MODE_OFF,
+    HVACMode,
 )
 from homeassistant.components.climate.const import (
     ATTR_MAX_TEMP,
@@ -48,8 +48,7 @@ from homeassistant.const import (
     CONF_TOKEN,
     STATE_OFF,
     STATE_ON,
-    TEMP_CELSIUS,
-    TEMP_FAHRENHEIT,
+    UnitOfTemperature,
     STATE_UNKNOWN,
     STATE_UNAVAILABLE,
 )
@@ -83,7 +82,7 @@ SUPPORTED_FEATURES_MAP = {
 }
 
 DEFAULT_CONF_CERT_FILE = "ac14k_m.pem"
-DEFAULT_CONF_TEMP_UNIT = TEMP_CELSIUS
+DEFAULT_CONF_TEMP_UNIT = UnitOfTemperature.CELSIUS
 DEFAULT_CONF_CONTROLLER = "yaml"
 
 SCAN_INTERVAL = timedelta(seconds=15)
@@ -230,14 +229,14 @@ class ClimateIP(ClimateEntity):
         t = self.rac.get_property(ATTR_MIN_TEMP)
         if t is None:
             t = DEFAULT_CLIMATE_IP_TEMP_MIN
-        return TemperatureConverter.convert(t, TEMP_CELSIUS, self.temperature_unit)
+        return TemperatureConverter.convert(t, UnitOfTemperature.CELSIUS, self.temperature_unit)
 
     @property
     def max_temp(self):
         t = self.rac.get_property(ATTR_MAX_TEMP)
         if t is None:
             t = DEFAULT_CLIMATE_IP_TEMP_MAX
-        return TemperatureConverter.convert(t, TEMP_CELSIUS, self.temperature_unit)
+        return TemperatureConverter.convert(t, UnitOfTemperature.CELSIUS, self.temperature_unit)
 
     @property
     def should_poll(self):
@@ -312,7 +311,7 @@ class ClimateIP(ClimateEntity):
 
     @property
     def hvac_mode(self):
-        return HVAC_MODE_OFF if self.rac.get_property(ATTR_HVAC_MODE) in [STATE_UNKNOWN, STATE_UNAVAILABLE, ''] else self.rac.get_property(ATTR_HVAC_MODE)
+        return HVACMode.OFF if self.rac.get_property(ATTR_HVAC_MODE) in [STATE_UNKNOWN, STATE_UNAVAILABLE, ''] else self.rac.get_property(ATTR_HVAC_MODE)
 
     @property
     def hvac_modes(self):
@@ -345,7 +344,7 @@ class ClimateIP(ClimateEntity):
                 TemperatureConverter.convert(
                     int(kwargs.get(ATTR_TEMPERATURE)),
                     self.temperature_unit,
-                    TEMP_CELSIUS,
+                    UnitOfTemperature.CELSIUS,
                 ),
             )
         if kwargs.get(ATTR_TARGET_TEMP_HIGH) is not None:
@@ -354,7 +353,7 @@ class ClimateIP(ClimateEntity):
                 TemperatureConverter.convert(
                     int(kwargs.get(ATTR_TARGET_TEMP_HIGH)),
                     self.temperature_unit,
-                    TEMP_CELSIUS,
+                    UnitOfTemperature.CELSIUS,
                 ),
             )
         if kwargs.get(ATTR_TARGET_TEMP_LOW) is not None:
@@ -363,7 +362,7 @@ class ClimateIP(ClimateEntity):
                 TemperatureConverter.convert(
                     int(kwargs.get(ATTR_TARGET_TEMP_LOW)),
                     self.temperature_unit,
-                    TEMP_CELSIUS,
+                    UnitOfTemperature.CELSIUS,
                 ),
             )
         self.schedule_update_ha_state(True)

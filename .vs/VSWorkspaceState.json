@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\custom_components",
+    "\\custom_components\\climate_ip"
   ],
-  "SelectedNode": "\\D:\\Luca\\repos\\samsungrac",
+  "SelectedNode": "\\custom_components\\climate_ip\\properties.py",
   "PreviewInSolutionExplorer": false
 }
